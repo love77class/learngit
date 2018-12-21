@@ -1,0 +1,131 @@
+ssh命令用于远程登录上Linux主机,格式 ssh root@192.168.1.179
+切换当前目录至指定目录， cd /usr 切换到usr目录下， cd .. 返回到上一级目录
+pwd 查看当前所在目录rm -rf 删除文件或目录，不可恢复rz 上传文件 解压 zip文件 unzip a.zipscp 远程拷贝 格式如下 scp game.zip root@192.168.1.179:/usr/local/vi 编辑文件命令 vi config.xml 打开文件， shift+i 进入编辑文件状态， ESC 退出编辑状态， shift + : 输入wq，保存退出。ll 列出当前目录所有文件的详细信息ls 列出当前目录所有文件（只包含文件名）sz 下载文件到本地， sz catalina.outmysql将查询结果导入到excel中， select * from dc_user into outfile &#39;/tmp/user.xls&#39;；service iptables status 查看当前iptables的服务状态。允许端口38090通过防火墙，修改 /etc/sysconfig/iptables 配置文件，添加-A INPUT -p tcp -m state --state NEW -m tcp --dport 38089 -j ACCEPT ，重启iptables ,service iptables restart。mv 文件到指定目录 mv * ../ 移动当前目录的所有文件到上一层目录grep 搜索过滤 ll|grep Cost 查看当前目录所有以Cost开头的文件mkdir 创建目录df -lh 查看磁盘空间show OPEN TABLES where In_use > 0; 查询mysql中表是否被锁
+系统信息
+arch 显示机器的处理器架构(1)
+uname -m 显示机器的处理器架构(2)
+uname -r 显示正在使用的内核版本
+dmidecode -q 显示硬件系统部件 - (SMBIOS / DMI)
+hdparm -i /dev/hda 罗列一个磁盘的架构特性
+hdparm -tT /dev/sda 在磁盘上执行测试性读取操作
+cat /proc/cpuinfo 显示CPU info的信息
+cat /proc/interrupts 显示中断
+cat /proc/meminfo 校验内存使用
+cat /proc/swaps 显示哪些swap被使用
+cat /proc/version 显示内核的版本
+cat /proc/net/dev 显示网络适配器及统计
+cat /proc/mounts 显示已加载的文件系统
+lspci -tv 罗列 PCI 设备
+lsusb -tv 显示 USB 设备
+date 显示系统日期
+cal 2007 显示2007年的日历表
+date 041217002007.00 设置日期和时间 - 月日时分年.秒
+clock -w 将时间修改保存到 BIOS
+
+
+address not configured yet 
+http://mirrors.jenkins-ci.org/war/1.638/
+
+
+关机 (系统的关机、重启以及登出 )
+shutdown -h now 关闭系统(1)
+init 0 关闭系统(2)
+telinit 0 关闭系统(3)
+shutdown -h hours:minutes & 按预定时间关闭系统
+shutdown -c 取消按预定时间关闭系统
+shutdown -r now 重启(1)
+reboot 重启(2)
+logout 注销
+1.2 关闭防火墙
+执行命令 service iptables stop
+验证: service iptables status
+1.3 关闭防火墙的自动运行
+执行命令 chkconfig iptables off
+验证: chkconfig --list | grep iptables
+P_ID=`ps -ef | grep -w "$SERVICE_NAME" | grep -v "grep" | awk &#39;{print $2}&#39;`
+--yum
+Linux升级命令有两个分别是yum upgrade和yum update, 这个两个命令是有区别的:
+yum upgrade只升级所有包，不升级软件和系统内核
+yum update 升级所有包同时也升级软件和系统内核
+
+
+-----------------------------------------------
+linux最小化配置：yum -y install vim nmap gcc telnet wget zip unzip openssh-clients
+安装vim: yum -y install vim
+安装nmap: yum install nmap
+安装gcc: yum -y install gcc
+安装telnet：yum -y install telnet
+安装wget: yum -y install wget
+
+
+linux配置ip地址:
+vim /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+TYPE=Ethernet
+ONBOOT=yes
+BOOTPROTO=static
+IPADDR=192.168.1.110
+NETMASK=255.255.255.0
+PREFIX=24
+GATEWAY=192.168.1.1
+DNS1=192.168.1.1
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=yes
+IPV6INIT=no
+NAME="eth0"
+ARPCHECK=no
+开始编辑，填写ip地址、子网掩码、网关、DNS等。
+-----------关于克隆虚拟机修改ip问题:
+http://blog.sina.com.cn/s/blog_77126fa501018s3d.html
+
+
+1： vi /etc/sysconfig/network-scripts/ifcfg-eth0
+ifcfg-eth0的配置文件里保存了以前的MAC地址，就把这一行删除掉在重启网卡
+2： /etc/udev/rules.d/70-persistent-net.rules 删除后重启机器
+因为这个文件绑定了网卡和mac地址，所以换了网卡以后MAC地址变了，所以不能正常启动，
+也可以直接编辑这个配置文件把里面的网卡和mac地址修改乘对应的，不过这样多麻烦，直接删除重启，它会自动生成个。
+rm -f /etc/udev/rules.d/70-persistent-net.rule
+查看路由：route -n
+删除路由：route del -net 169.254.0.0 netmask 255.255.0.0 eth0
+
+
+
+文件和目录
+cd /home 进入 &#39;/ home&#39; 目录&#39;
+cd .. 返回上一级目录
+cd ../.. 返回上两级目录
+cd 进入个人的主目录
+cd ~user1 进入个人的主目录
+cd - 返回上次所在的目录
+pwd 显示工作路径
+ls 查看目录中的文件
+ls -F 查看目录中的文件
+ls -l 显示文件和目录的详细资料
+ls -a 显示隐藏文件
+ls *[0-9]* 显示包含数字的文件名和目录名
+tree 显示文件和目录由根目录开始的树形结构(1)
+lstree 显示文件和目录由根目录开始的树形结构(2)
+mkdir dir1 创建一个叫做 &#39;dir1&#39; 的目录&#39;
+mkdir dir1 dir2 同时创建两个目录
+mkdir -p /tmp/dir1/dir2 创建一个目录树
+rm -f file1 删除一个叫做 &#39;file1&#39; 的文件&#39;
+rmdir dir1 删除一个叫做 &#39;dir1&#39; 的目录&#39;
+rm -rf dir1 删除一个叫做 &#39;dir1&#39; 的目录并同时删除其内容
+rm -rf dir1 dir2 同时删除两个目录及它们的内容
+mv dir1 new_dir 重命名/移动 一个目录
+cp file1 file2 复制一个文件
+cp dir/* . 复制一个目录下的所有文件到当前工作目录
+cp -a /tmp/dir1 . 复制一个目录到当前工作目录
+cp -a dir1 dir2 复制一个目录
+ln -s file1 lnk1 创建一个指向文件或目录的软链接
+ln file1 lnk1 创建一个指向文件或目录的物理链接
+touch -t 0712250000 file1 修改一个文件或目录的时间戳 - (YYMMDDhhmm)
+file file1 outputs the mime type of the file as text
+iconv -l 列出已知的编码
+iconv -f fromEncoding -t toEncoding inputFile > outputFile creates a new from the given input file by assuming it is encoded in fromEncoding and converting it to toEncoding.
+find . -maxdepth 1 -name *.jpg -print -exec convert "{}" -resize 80x60 
+
+
+
+
+
